@@ -9,8 +9,8 @@ const Wrapper  = styled.div`
     background-color: #ffffff;
 `
 const InOut  = styled.div`
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
