@@ -1,6 +1,7 @@
+import IndexPage from "../view";
 
 function Home() {
-  return 
+  return <IndexPage/>
 }
 
 export default Home;

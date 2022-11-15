@@ -1,11 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const colorCode = [
+    {name: "Oti", bgColor: "#6427AE", textColor: "#ffffff"},
+    {name: "Aghazu", bgColor: "#02985C", textColor: "#ffffff"},
+    {name: "Igbokwe", bgColor:"#8F1FAA", textColor: "#ffffff"}
+]
 const uiSlice = createSlice({
     name: 'ui',
-    initialState: {},
+    initialState: {searchSuggest: false, colorCode: colorCode, zoomPercentage: 0},
         reducers: {
-            addResizeData:  (state, action) => {
-                state.resizeData = action.payload;
+            addSearchSuggest:  (state, action) => {
+                state.searchSuggest = action.payload;
+            },
+            addSlideWindowCenterTrigger:  (state, action) => {
+                state.slideWindowCenterTrigger = action.payload;
+            },
+            addShowLoadMore:  (state, action) => {
+                state.showLoadMore = action.payload;
+            },
+            addZoomPercentage:  (state, action) => {
+                state.zoomPercentage = action.payload;
+            },
+            addShowZoomLabel:  (state, action) => {
+                state.showZoomLabel = action.payload;
             },
         },
 })
