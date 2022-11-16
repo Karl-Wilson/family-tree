@@ -190,6 +190,12 @@ html, body, div, p, a, h1, h2, h3, h4, h5, h6{
     .ml-lg-0{
         margin-left: 0px;
     }
+    .mt-lg-0{
+        margin-top: 0px;
+    }
+    .mb-lg-0{
+        margin-bottom: 0px;
+    }
     .mt-lg-8{
         margin-top: 8px;
     }

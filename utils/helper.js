@@ -16,3 +16,20 @@ export const isPageBottom = (dispatch, addShowLoadMore) =>{
         }
     }
 }
+
+export const flexBoxStyling  = {
+        all: function(direction, justify, align){
+            return `
+            display: flex;
+            flex-direction: ${direction};
+            justify-content: ${justify};
+            align-items: ${align};
+            `
+        },
+        direction: function(direction){
+            return`
+            display: flex;
+            flex-direction: ${direction};
+            `
+        }
+    }
