@@ -43,21 +43,32 @@ const useAddSlideWindowTop = (slideWindowTopHandler) =>{
         slideWindowTopHandler()
       }, [])
 }
+const useAddDragEffect = (mouseDown, removeMouseDown, addMouseDown) =>{
+    useEffect(() => {
+        document.getElementById('draggable-window').addEventListener('mousedown', mouseDown)
+        document.getElementById('draggable-window').addEventListener('touchstart', removeMouseDown)
+        document.getElementById('draggable-window').addEventListener('touchend', addMouseDown)
+        return () => {
+            document.getElementById('draggable-window').removeEventListener('mousedown', mouseDown)
+            document.getElementById('draggable-window').removeEventListener('touchstart', removeMouseDown)
+            document.getElementById('draggable-window').removeEventListener('touchend', addMouseDown)
+        }
+      }, [])
+}
 
 const TreeArea = props =>{
     const dispatch = useDispatch()
     const {addShowLoadMore} = uiActions
-    const slideWindow = useRef()
+    const slideWindow = useRef(false)
     const [slideWindowTop, setSlideWindowTop] = useState();
-    const {mouseDown} = useDragFunction(slideWindow.current)
+    const {mouseDown, removeMouseDown, addMouseDown} = useDragFunction()
     
     const slideWindowTopHandler = () =>{
         let searchHeight = document.getElementById("defaultSearch").offsetHeight
         let searchTop = document.getElementById("defaultSearch").offsetTop
         setSlideWindowTop(searchHeight + searchTop +'px')
     }
-
-
+    useAddDragEffect(mouseDown, removeMouseDown, addMouseDown)
     useAddLoadBtnOnScroll(dispatch, addShowLoadMore);
     useAddSlideWindowTop(slideWindowTopHandler);
     

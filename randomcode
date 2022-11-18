@@ -1,0 +1,58 @@
+export const useSecond = (slideWindow)=>{
+  
+  const [isDown, setIsDown] = useState();
+  const [startX, setStartX] = useState();
+  const [scrollLeft, setScrollLeft] = useState();
+  const refup = useRef(isDown)
+  const refdown = useRef(startX)
+  const refside = useRef(scrollLeft)
+  const setMyState = data => {
+    refup.current = data;
+    setIsDown(data);
+  };
+  const setMynew = data => {
+    refdown.current = data;
+    setStartX(data);
+  };
+  
+  const setMyside = data => {
+    refside.current = data;
+    setScrollLeft(data);
+  };
+  
+  const mouseDown = (e) =>{
+    const slider = document.querySelector('#draggable-window');
+      setMyState(true)
+      setMynew(e.pageX - slider.scrollLeft)
+      setMyside(slider.scrollLeft);
+  }
+  const mouseMove = (e) =>{
+    const slider = document.querySelector('#draggable-window');
+      if(!refup.current) return;
+      e.preventDefault();
+      const x = e.pageX - slider.scrollLeft;
+      
+      const walk = (x - refdown.current); //scroll-fast
+      console.log(slider.scrollLeft )
+      slider.scrollLeft = refside.current - walk;
+      
+  }
+const mouseUp =(e)=>{
+  const slider = document.querySelector('#draggable-window');
+  setMyState(false)
+}
+useEffect(() => {
+  const slider = document.querySelector('#draggable-window');
+  slider.addEventListener('mousedown', mouseDown)
+  slider.addEventListener('mousemove', mouseMove)
+  slider.addEventListener('mouseup', mouseUp)
+
+  return () => {
+    slider.removeEventListener('mousedown', mouseDown)
+    slider.removeEventListener('mousemove', mouseMove)
+    slider.removeEventListener('mouseup', mouseUp)
+  }
+}, [])
+
+
+}
