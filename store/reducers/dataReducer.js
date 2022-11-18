@@ -2,10 +2,16 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const dataSlice = createSlice({
     name: 'data',
-    initialState: {},
+    initialState: {treeData: {}, ancestorColorData: []},
         reducers: {
             addResizeData:  (state, action) => {
                 state.resizeData = action.payload;
+            },
+            addTreeData:  (state, action) => {
+                state.treeData = action.payload;
+            },
+            addAncestorColorData:  (state, action) => {
+                state.ancestorColorData = action.payload;
             },
         },
 })

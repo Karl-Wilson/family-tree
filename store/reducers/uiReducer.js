@@ -7,7 +7,7 @@ const colorCode = [
 ]
 const uiSlice = createSlice({
     name: 'ui',
-    initialState: {searchSuggest: false, colorCode: colorCode, zoomPercentage: 0},
+    initialState: {searchSuggest: false, colorCode: colorCode, zoomPercentage: 0, isPageLoading: false},
         reducers: {
             addSearchSuggest:  (state, action) => {
                 state.searchSuggest = action.payload;
@@ -23,6 +23,9 @@ const uiSlice = createSlice({
             },
             addShowZoomLabel:  (state, action) => {
                 state.showZoomLabel = action.payload;
+            },
+            addPageLoading:  (state, action) => {
+                state.isPageLoading = action.payload;
             },
         },
 })

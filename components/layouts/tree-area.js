@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Family from "../core/family";
 import { useDragFunction } from "../../utils/hooks";
 import {isPageBottom} from '../../utils/helper'
-import newData from "../core/data";
 import { uiActions } from "../../store/reducers/uiReducer";
+import { dataActions } from "../../store/reducers/dataReducer";
+import newData from '../core/data'
 
 const Wrapper  = styled.div`
     width: 100%;
@@ -29,6 +30,14 @@ const InnerWrapper  = styled.div`
     left: ${props=>props.left||'0px'};
     top: ${props=>props.top||''};
 `
+const color = [{
+    color: "#303CB1",
+    name: "Felix"
+}, 
+{
+    color: "#303CB1",
+    name: "John"
+}]
 const useAddLoadBtnOnScroll = (dispatch, addShowLoadMore)=>{
     useEffect(() => {
         isPageBottom(dispatch, addShowLoadMore)
@@ -58,24 +67,41 @@ const useAddDragEffect = (mouseDown, removeMouseDown, addMouseDown) =>{
 
 const TreeArea = props =>{
     const dispatch = useDispatch()
+    const treeData = useSelector(state=>state.data.treeData)
     const {addShowLoadMore} = uiActions
+    const {addTreeData, addAncestorColorData} = dataActions
     const slideWindow = useRef(false)
+    const nodataMsg = useRef()
     const [slideWindowTop, setSlideWindowTop] = useState();
     const {mouseDown, removeMouseDown, addMouseDown} = useDragFunction()
-    
     const slideWindowTopHandler = () =>{
         let searchHeight = document.getElementById("defaultSearch").offsetHeight
         let searchTop = document.getElementById("defaultSearch").offsetTop
         setSlideWindowTop(searchHeight + searchTop +'px')
     }
+    const centerNoDatamsg = () =>{
+        let div = nodataMsg.current.clientWidth
+        let center = (window.innerWidth/2) - (div/2)
+        nodataMsg.current.style.left = center+"px"
+        
+    }
+    useEffect(() => {
+        if(Object.values(treeData).length < 1){
+            dispatch(addTreeData(newData))
+            dispatch(addAncestorColorData(color))
+        }  
+        centerNoDatamsg()  
+    }, [])
+    
     useAddDragEffect(mouseDown, removeMouseDown, addMouseDown)
     useAddLoadBtnOnScroll(dispatch, addShowLoadMore);
     useAddSlideWindowTop(slideWindowTopHandler);
     
     return (
             <Wrapper id="draggable-window" className="zIndex-2 pt-21">
-                <InnerWrapper id="slideWindow" ref={slideWindow} top={slideWindowTop}>
-                    <Family data={newData}/>
+                <InnerWrapper id="slideWindow" ref={slideWindow} top={slideWindowTop} >
+                    {Object.values(treeData).length>0 && <Family data={treeData}/>}
+                    {Object.values(treeData).length<1 && <p ref={nodataMsg} style={{position: "relative"}}>No data available</p>}
                 </InnerWrapper>
             </Wrapper>
     )

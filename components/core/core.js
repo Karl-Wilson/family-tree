@@ -7,5 +7,6 @@ import ErrorBoundary from "./errorBoundary";
 import Person from "./person";
 import SidebarExitBar from "./sidebarExitBar";
 import ZoomLabel from "./zoomLabel";
+import PageLoading from "./pageLoading";
 
-export {Input, PageWrapper, ColorKeys, ZoomBtn, Button, ErrorBoundary, Person, SidebarExitBar, ZoomLabel}
+export {Input, PageWrapper, ColorKeys, ZoomBtn, Button, ErrorBoundary, Person, SidebarExitBar, ZoomLabel, PageLoading}

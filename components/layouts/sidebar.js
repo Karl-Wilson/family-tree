@@ -34,13 +34,13 @@ const Wrapper  = styled.div`
     bpx-sizing: border-box;
 
     &.showSidebar{
-        z-index: 20;
+        z-index: 40;
         animation-fill-mode: forwards;
         animation-name: ${slideRight};
         animation-duration: .5s;
     }
     &.hideSidebar{
-        z-index: 20;
+        z-index: 40;
         animation-fill-mode: forwards;
         animation-name: ${slideLeft};
         animation-duration: .5s;
@@ -90,7 +90,7 @@ const data = [{
 const Sidebar = props =>{
 
     return (
-        <Wrapper id="sidebar"  className="p-13 p-lg-21 zIndex-4 shadow-lg-2">
+        <Wrapper id="sidebar"  className="p-13 p-lg-21 zIndex-5 shadow-lg-2">
             <SidebarExitBar/>
             <LineageContainer className="mt-21 mb-21">
                 <LineageSearchContainer label="Start" className="mb-13"/>

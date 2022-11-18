@@ -11,7 +11,7 @@ const ZoomBtn2  = styled(ZoomBtn)`
 `
 const ZoomBtnFloat = props =>{
     return (
-        <ZoomBtn2 className="mr-21 mb-21 zIndex-3 shadow-2"/>
+        <ZoomBtn2 className="mr-21 mb-21 zIndex-4 shadow-2"/>
     )
 }
 export default ZoomBtnFloat;

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import {Button} from "../core/core"
 import { useEffect, useState, useRef } from "react";
-import { useSelector } from "react-redux";
+
 const Btn  = styled(Button)`
         position: absolute;
         bottom: 0;
@@ -39,7 +39,7 @@ const LoadMoreBtn = props =>{
     
     return (
         <>
-          <Btn id="LoadMoreBtn" left={left} display={display} className="zIndex-3 mb-21 shadow-2" borderless>Load More</Btn>
+          <Btn id="LoadMoreBtn" left={left} display={display} className="zIndex-4 mb-21 shadow-2" borderless>Load More</Btn>
         </>
     )
 }

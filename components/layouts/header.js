@@ -17,15 +17,6 @@ const Wrapper  = styled.div`
         background-color: transparent;
     }
 `
-const data = [{
-    color: "#303CB1",
-    name: "Felix"
-}, 
-{
-    color: "#303CB1",
-    name: "John"
-}]
-const empty = []
 const useDisplayAncestorKeyOnResize = (setDisplayAncestorKey) =>{
     function resize(){
          let windowWidth = window.innerWidth;
@@ -48,12 +39,13 @@ const useDisplayAncestorKeyOnResize = (setDisplayAncestorKey) =>{
 
 const Header = props =>{
     const isSearchSuggestOn = useSelector(state=>state.ui.searchSuggest);
+    const ancestorColorData = useSelector(state=>state.data.ancestorColorData)
     const [displayAncestorColorKey, setDisplayAncestorKey] = useState(false)
     useDisplayAncestorKeyOnResize(setDisplayAncestorKey)
     return (
-            <Wrapper className="p-0 p-lg-21 zIndex-3" suggestOn={isSearchSuggestOn}>
+            <Wrapper className="p-0 p-lg-21 zIndex-4" suggestOn={isSearchSuggestOn}>
                 <DefaultSearchContainer/>
-                {(data.length>0 && !isSearchSuggestOn && displayAncestorColorKey) && <AncestorColorContainer dataInput={data} className="shadow-2 mt-lg-8 mr-21 ml-21 mr-lg-0 ml-lg-0 p-8 p-lg-13"/>}
+                {(ancestorColorData.length>0 && !isSearchSuggestOn && displayAncestorColorKey) && <AncestorColorContainer dataInput={ancestorColorData} className="shadow-2 mt-lg-8 mr-21 ml-21 mr-lg-0 ml-lg-0 p-8 p-lg-13"/>}
                 {isSearchSuggestOn && <SearchSuggestionContainer className="shadow-lg-2 p-13" suggestionListClassName="pr-13 pl-13" dataInput={empty}/>}    
             </Wrapper>
     )
