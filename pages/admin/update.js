@@ -1,6 +1,7 @@
 import { Wrapper } from ".";
 import UpdateView from "../../view/admin/updateView";
 import { useRef } from "react";
+import { getSession } from "next-auth/react";
 
 const Update = props =>{
   const wrapperRef = useRef()
@@ -12,17 +13,17 @@ return (
 }
 export default Update;
 export async function getServerSideProps(context) {
-    const user = true;
-    if (!user) {
-        return {
-          redirect: {
-            destination: '/admin/login',
-            permanent: false,
-          },
-        }
+  const session = await getSession(context)
+  if (!session) {
+      return {
+        redirect: {
+          destination: '/admin/login',
+          permanent: false,
+        },
       }
+    }
     
     return {
-      props: {user: user}, // will be passed to the page component as props
+      props: {session: session}, // will be passed to the page component as props
     }
   }

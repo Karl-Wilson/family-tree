@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { InnerWrapper as Wrapper , Header, Title, Body, Footer, SubmitBtn, Logout, FormGroup, Radio, Label, Form} from "./myStyledComponents";
-
+import { signOut } from "next-auth/react";
 const Dashboard = props =>{
     const router = useRouter();
     const actionSelectHandler = (e) =>{
@@ -17,7 +17,7 @@ const Dashboard = props =>{
     <Wrapper className="p-21">
         <Header>
             <Title>Admin</Title>
-            <Logout>Logout</Logout>
+            <Logout onClick={() => signOut()}>Logout</Logout>
         </Header>
         <Body>
             <Form>
