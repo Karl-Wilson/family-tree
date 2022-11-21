@@ -7,8 +7,12 @@ const colorCode = [
 ]
 const uiSlice = createSlice({
     name: 'ui',
-    initialState: {searchSuggest: false, colorCode: colorCode, zoomPercentage: 0, isPageLoading: false},
+    initialState: {searchSuggest: false, colorCode: colorCode, zoomPercentage: 0, isPageLoading: false, slideWindowCenterTrigger: true,
+        currentGen: 6},
         reducers: {
+            addcurrentGen:  (state, action) => {
+                state.currentGen = action.payload;
+            },
             addSearchSuggest:  (state, action) => {
                 state.searchSuggest = action.payload;
             },

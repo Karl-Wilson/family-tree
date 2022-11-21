@@ -26,7 +26,7 @@ const InnerWrapper  = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    position: absolute;
+    position: relative;
     left: ${props=>props.left||'0px'};
     top: ${props=>props.top||''};
 `
@@ -71,26 +71,20 @@ const TreeArea = props =>{
     const {addShowLoadMore} = uiActions
     const {addTreeData, addAncestorColorData} = dataActions
     const slideWindow = useRef(false)
-    const nodataMsg = useRef()
     const [slideWindowTop, setSlideWindowTop] = useState();
     const {mouseDown, removeMouseDown, addMouseDown} = useDragFunction()
+    
     const slideWindowTopHandler = () =>{
         let searchHeight = document.getElementById("defaultSearch").offsetHeight
         let searchTop = document.getElementById("defaultSearch").offsetTop
         setSlideWindowTop(searchHeight + searchTop +'px')
     }
-    const centerNoDatamsg = () =>{
-        let div = nodataMsg.current.clientWidth
-        let center = (window.innerWidth/2) - (div/2)
-        nodataMsg.current.style.left = center+"px"
-        
-    }
+
     useEffect(() => {
         if(Object.values(treeData).length < 1){
             dispatch(addTreeData(newData))
             dispatch(addAncestorColorData(color))
         }  
-        centerNoDatamsg()  
     }, [])
     
     useAddDragEffect(mouseDown, removeMouseDown, addMouseDown)
@@ -101,7 +95,7 @@ const TreeArea = props =>{
             <Wrapper id="draggable-window" className="zIndex-2 pt-21">
                 <InnerWrapper id="slideWindow" ref={slideWindow} top={slideWindowTop} >
                     {Object.values(treeData).length>0 && <Family data={treeData}/>}
-                    {Object.values(treeData).length<1 && <p ref={nodataMsg} style={{position: "relative"}}>No data available</p>}
+                    {Object.values(treeData).length<1 && <p>No data available</p>}
                 </InnerWrapper>
             </Wrapper>
     )

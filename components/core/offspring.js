@@ -4,6 +4,7 @@ import Family from "./family";
 import Line from "./line";
 import { useEffect } from "react";
 import { totalWidth } from "./children";
+import { useSelector } from "react-redux";
 const Wrapper = styled.div`
     width: auto;
     height: auto;
@@ -14,6 +15,7 @@ const Offspring = props =>{
         if(props.data == null){
             totalWidth()
         }
+        
     }, [props.data])
     
     return(

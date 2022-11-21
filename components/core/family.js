@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { uiActions } from "../../store/reducers/uiReducer";
 
+
 const Wrapper = styled.div`
     width: auto;
     height: auto;
@@ -17,8 +18,9 @@ const Wrapper = styled.div`
 `
 const Family = props =>{
     const dispatch = useDispatch();
-    const {addSlideWindowCenterTrigger} = uiActions
+    const {addSlideWindowCenterTrigger, addcurrentGen} = uiActions
     const colorCode = useSelector(state=>state.ui.colorCode);
+    const currentGen = useSelector(state=>state.ui.currentGen);
     const [offspring, setOffspring] = useState(null)
     const [parent, setParent] = useState(false)
     const [child, setChild] = useState(false)
@@ -40,6 +42,11 @@ const Family = props =>{
             if(props.data.parentId){
                 setChild(true)
             }  
+            if(props.data.generation > currentGen){
+                //stops at a specified generation
+                setParent(false);
+                setOffspring(null)
+            } 
         }
         if(props.bgColor){
             setBgColor(props.bgColor)
@@ -51,6 +58,7 @@ const Family = props =>{
              setTextColor(colorCode.textColor)
          }
         }) 
+        
          
     }, [])
     const clickHandler = () =>{
@@ -66,7 +74,7 @@ const Family = props =>{
         <Wrapper id="family" {...props}>
             {Object.values(props.data).length > 0 && <>
                 <Person parent={parent} child={child} onClick={clickHandler} textColor={textColor} color={bgColor}>{name}</Person>
-                <Offspring data={offspring} bgColor={bgColor} textColor={textColor}/>
+                {offspring != null && <Offspring data={offspring} bgColor={bgColor} textColor={textColor}/>}
             </>}
             {Object.values(props.data).length <= 0 && <p>No data is available</p>}
         </Wrapper>

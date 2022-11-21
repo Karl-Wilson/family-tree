@@ -32,16 +32,17 @@ const centerTreeWhenAPersonIsClicked = (dispatch, addSlideWindowCenterTrigger, s
     //centers tree when a person is clicked
     //when a person is clicked, it triggers slideWindowCenterTrigger, which triggers a rerender
     //and which triggers this function to run
-    if(slideWindowCenterTrigger){
+    
         let windowWidth = window.innerWidth
         let slideWindowWidth = slideWindow.clientWidth
         if(slideWindowWidth<windowWidth){
             slideWindow.style.position = 'relative'
         }else{
             slideWindow.style.position = 'absolute'
-        }  
-        dispatch(addSlideWindowCenterTrigger(false))
-    } 
+        }
+        if(slideWindowCenterTrigger){  
+            dispatch(addSlideWindowCenterTrigger(false))
+        } 
 }
 
 
