@@ -38,7 +38,7 @@ const AddView = props =>{
     const treeData = useSelector(state=>state.data.treeData)
     const ancestorColorData = useSelector(state=>state.data.ancestorColorData)
     const isLoading = useSelector(state=>state.ui.isLoading)
-    const [error, setError] = useState(null)
+    const [error, setError] = useState(false)
     const [colorCodedList, setColorCodedList] = useState([])
     const dropdownList = useRef()
 
@@ -46,9 +46,6 @@ const AddView = props =>{
     useEffect(() => {
         try{
             if(treeData && ancestorColorData){
-                // let init = new treeGenerator(colorCodeFamilyList(treeData.tree, ancestorColorData))
-                // setColorCodedList(init.getAllAsList())
-                console.log(treeData, ancestorColorData)
                 setColorCodedList(colorCodeFamilyList(treeData.tree, ancestorColorData))
             }   
         }catch(e){
@@ -80,8 +77,9 @@ const AddView = props =>{
     }
     const parentClickHandler = () =>{
         clearError()
-        dropdownList.current.classList.add("show")
+        dropdownList.current.classList.toggle("show")
     }
+ 
     const listClickHandler =(e)=>{
         document.querySelector("input[name='parent']").value = e.target.getAttribute("name")
         document.querySelector("input[name='parent']").setAttribute("data-id", e.target.getAttribute("data-id"))
@@ -89,7 +87,7 @@ const AddView = props =>{
         blurHandler()
     }
     const clearError = () =>{
-        setError(null)
+        setError(false)
         let formCollection = document.getElementsByClassName("form")
         for(let i=0; i<formCollection.length; i++){
                 formCollection[i].style = "border-color: #cccccc"
@@ -100,31 +98,35 @@ const AddView = props =>{
         let firstname = formCollection.firstname.value
         let lastname = formCollection.lastname.value
         let parent = formCollection.parent.value
+        let error = null
         if(!firstname && !lastname){
-            setError("Fill in empty field(s)")
+            error = "Fill in empty field(s)"
             formCollection.firstname.style = "border-color: red"
             formCollection.lastname.style = "border-color: red"
         }
         if(!parent){
-            setError("Fill in empty field(s)")
+            error = "Fill in empty field(s)"
             formCollection.parent.style = "border-color: red"
         } 
         if(firstname){
             if(!isNaN(firstname)){
-                setError("Alphabets required")
-            formCollection.firstname.style = "border-color: red"
+                error = "Alphabets required"
+                formCollection.firstname.style = "border-color: red"
             }
         }
         if(lastname){
             if(!isNaN(lastname)){
-                setError("Alphabets required")
-            formCollection.lastname.style = "border-color: red"
+                error = "Alphabets required"
+                formCollection.lastname.style = "border-color: red"
             }
         }
+        return error
     }
     const submitHandler = () =>{
-        validator()
-        if(!error){
+        let error = validator()
+        if(error){
+            setError(error)
+        }else{
             let parentId = document.querySelector("input[name='parent']").getAttribute("data-id")
             let parentGeneration = document.querySelector("input[name='parent']").getAttribute("data-gen")
             let firstname = capitalizeFirstLetter(document.querySelector("input[name='firstname']").value)
@@ -144,8 +146,8 @@ const AddView = props =>{
                 <FormGroup className="mb-21">
                     <Label className="mb-8">Parent</Label>
                     <DropdownContainer>
-                        <Input type="text" className="p-8 form" name="parent" onChange={parentOnChangehandler} onClick={parentClickHandler} data-id="" data-gen=""/>
-                        <Dropdown ref={dropdownList} id="dropdown" className="shadow-2 zIndex-3">
+                        <Input type="text" className="p-8 form" name="parent" onChange={parentOnChangehandler} onClick={parentClickHandler} data-id="" data-gen="" required/>
+                        <Dropdown ref={dropdownList} id="dropdown" className="shadow-2 zIndex-3" >
                             {!isLoading && <>{colorCodedList.map((value, idx)=>{
                                 return <ListItems className="pl-13 pt-8 pb-8 list" key={idx+value} onClick={listClickHandler} name={value.firstname} data-id={value.id} data-gen={value.generation}>
                                         <ColorBox className="mr-8" color={value.bgColor}/>
@@ -159,11 +161,11 @@ const AddView = props =>{
                 </FormGroup>
                 <FormGroup className="mb-21">
                     <Label className="mb-8">Firstname</Label>
-                    <Input type="text" className="p-8 form" name="firstname" onClick={clearError}/>
+                    <Input type="text" className="p-8 form" name="firstname" onClick={()=>{clearError(); blurHandler()}} required/>
                 </FormGroup>
                 <FormGroup className="mb-21">
                     <Label className="mb-8">Lastname</Label>
-                    <Input type="text" className="p-8 form" name="lastname" onClick={clearError}/>
+                    <Input type="text" className="p-8 form" name="lastname" onClick={()=>{clearError(); blurHandler()}}/>
                 </FormGroup>
             </Body>
             <Footer justifyContent="space-between">
