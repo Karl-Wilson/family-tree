@@ -2,6 +2,8 @@ import { dataActions } from "../store/reducers/dataReducer";
 import { uiActions } from "../store/reducers/uiReducer";
 export const fetchTreeFromAddView = (dispatch) =>{
     const {addTreeData, addAncestorColorData} = dataActions
+    const {addIsLoading} = uiActions
+    dispatch(addIsLoading(true))
     fetch("/api/add").then(response => {
         return response.json(); 
     }).then(data => {
@@ -12,6 +14,7 @@ export const fetchTreeFromAddView = (dispatch) =>{
         if(data.error){
             throw data.error
         }
+        dispatch(addIsLoading(false))
     }).catch((error) => {
         console.error('There has been a problem,', error);
     });

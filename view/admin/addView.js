@@ -37,6 +37,7 @@ const AddView = props =>{
     const router = useRouter()
     const treeData = useSelector(state=>state.data.treeData)
     const ancestorColorData = useSelector(state=>state.data.ancestorColorData)
+    const isLoading = useSelector(state=>state.ui.isLoading)
     const [error, setError] = useState(null)
     const [colorCodedList, setColorCodedList] = useState([])
     const dropdownList = useRef()
@@ -44,15 +45,16 @@ const AddView = props =>{
     useFetchData(dispatch)
     useEffect(() => {
         try{
-            if(treeData){
+            if(treeData && ancestorColorData){
                 // let init = new treeGenerator(colorCodeFamilyList(treeData.tree, ancestorColorData))
                 // setColorCodedList(init.getAllAsList())
+                console.log(treeData, ancestorColorData)
                 setColorCodedList(colorCodeFamilyList(treeData.tree, ancestorColorData))
             }   
         }catch(e){
             console.log("addView useEffect Error", e.message)
         }
-    }, [treeData])
+    }, [treeData, ancestorColorData])
     
     const parentOnChangehandler = (e) =>{
         let value = e.target.value
@@ -144,12 +146,13 @@ const AddView = props =>{
                     <DropdownContainer>
                         <Input type="text" className="p-8 form" name="parent" onChange={parentOnChangehandler} onClick={parentClickHandler} data-id="" data-gen=""/>
                         <Dropdown ref={dropdownList} id="dropdown" className="shadow-2 zIndex-3">
-                            {colorCodedList.map((value, idx)=>{
+                            {!isLoading && <>{colorCodedList.map((value, idx)=>{
                                 return <ListItems className="pl-13 pt-8 pb-8 list" key={idx+value} onClick={listClickHandler} name={value.firstname} data-id={value.id} data-gen={value.generation}>
                                         <ColorBox className="mr-8" color={value.bgColor}/>
                                         <p>{value.firstname}</p>
                                     </ListItems>
-                            })}
+                            })}</>}
+                            {isLoading &&<p className="p-13">Loading...</p>}
                         </Dropdown>
                     </DropdownContainer>
                     
