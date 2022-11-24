@@ -5,6 +5,7 @@ export const InnerWrapper = styled.div`
     width: ${props=>props.width||'377px'};
     height: ${props=>props.height||'auto'};
     box-sizing: border-box;
+    position: relative;
     @media screen and (min-width: 992px){
         border: ${props=>props.borderless? "": "1px solid #cccccc"};
         border-radius: 10px;
@@ -14,6 +15,7 @@ const Div = styled.div`
     width: 100%;
     height: auto;
     display: flex;
+    position: relative;
 
 `
 export const Header  = styled(Div)`
@@ -47,6 +49,7 @@ export const Form  = styled.form`
     ${flexBoxStyling.direction("column")}
 `
 export const FormGroup = styled.div`
+    position: relative;
     ${props=>flexBoxStyling.direction(props.flexDirection||"column")}
 `
 export const Input  = styled.input`
@@ -101,4 +104,22 @@ export const BackBtn  = styled(Button)`
         width: 81px;
         order: 1;
     }
+`
+
+export const ListItems  = styled.div`
+    width: 100%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    &.active{
+        background-color: #eeeeee;
+    }
+    &:hover{
+        background-color: #eeeeee;
+    }
+`
+export const ColorBox  = styled.div`
+    width: 20px;
+    height: 20px;
+    background-color: ${props=>props.color||"#000000"};
 `

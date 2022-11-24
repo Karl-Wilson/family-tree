@@ -8,5 +8,6 @@ import Person from "./person";
 import SidebarExitBar from "./sidebarExitBar";
 import ZoomLabel from "./zoomLabel";
 import PageLoading from "./pageLoading";
+import MessageModal from "./messageModal";
 
-export {Input, PageWrapper, ColorKeys, ZoomBtn, Button, ErrorBoundary, Person, SidebarExitBar, ZoomLabel, PageLoading}
+export {Input, PageWrapper, ColorKeys, ZoomBtn, Button, ErrorBoundary, Person, SidebarExitBar, ZoomLabel, PageLoading, MessageModal}

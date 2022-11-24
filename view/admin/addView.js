@@ -1,8 +1,11 @@
 import styled from "styled-components";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
-import { firstLetterToLowercase  } from "../../utils/helper";
-import { InnerWrapper as Wrapper , Header, Title, Body, Footer, SubmitBtn, BackBtn, FormGroup, Radio, Label, Form, Input, ErrorMessage} from "./myStyledComponents";
+import { firstLetterToLowercase, colorCodeFamilyList, capitalizeFirstLetter } from "../../utils/helper";
+import { fetchTreeFromAddView, addNewMember } from "../../utils/thunks";
+import { useSelector, useDispatch } from "react-redux";
+import {PageLoading} from '../../components/core/core'
+import { InnerWrapper as Wrapper , Header, Title, Body, Footer, SubmitBtn, BackBtn, FormGroup, Radio, Label, Form, Input, ErrorMessage, ListItems, ColorBox} from "./myStyledComponents";
 const DropdownContainer  = styled.div`
     width: 100%;
     height: auto;
@@ -22,22 +25,35 @@ const Dropdown = styled.div`
         flex-direction: column;
     }
 `
-const ListItems  = styled.p`
-    width: 100%;
-    cursor: pointer;
-    &.active{
-        background-color: #eeeeee;
-    }
-    &:hover{
-        background-color: #eeeeee;
-    }
-`
+const useFetchData = (dispatch) =>{
+    useEffect(() => {
+        fetchTreeFromAddView(dispatch)
+    }, []) 
+}
+
 let names = ["Oti", "Obo", "Ememochu", "Aghazu", "Igbokwe", "Chibunma", "Okose"]
 const AddView = props =>{
+    const dispatch = useDispatch()
     const router = useRouter()
+    const treeData = useSelector(state=>state.data.treeData)
+    const ancestorColorData = useSelector(state=>state.data.ancestorColorData)
     const [error, setError] = useState(null)
+    const [colorCodedList, setColorCodedList] = useState([])
     const dropdownList = useRef()
 
+    useFetchData(dispatch)
+    useEffect(() => {
+        try{
+            if(treeData){
+                // let init = new treeGenerator(colorCodeFamilyList(treeData.tree, ancestorColorData))
+                // setColorCodedList(init.getAllAsList())
+                setColorCodedList(colorCodeFamilyList(treeData.tree, ancestorColorData))
+            }   
+        }catch(e){
+            console.log("addView useEffect Error", e.message)
+        }
+    }, [treeData])
+    
     const parentOnChangehandler = (e) =>{
         let value = e.target.value
         let nameCollection = document.getElementsByClassName('list')
@@ -66,6 +82,8 @@ const AddView = props =>{
     }
     const listClickHandler =(e)=>{
         document.querySelector("input[name='parent']").value = e.target.getAttribute("name")
+        document.querySelector("input[name='parent']").setAttribute("data-id", e.target.getAttribute("data-id"))
+        document.querySelector("input[name='parent']").setAttribute("data-gen", e.target.getAttribute("data-gen"))
         blurHandler()
     }
     const clearError = () =>{
@@ -104,6 +122,14 @@ const AddView = props =>{
     }
     const submitHandler = () =>{
         validator()
+        if(!error){
+            let parentId = document.querySelector("input[name='parent']").getAttribute("data-id")
+            let parentGeneration = document.querySelector("input[name='parent']").getAttribute("data-gen")
+            let firstname = capitalizeFirstLetter(document.querySelector("input[name='firstname']").value)
+            let lastname = capitalizeFirstLetter(document.querySelector("input[name='lastname']").value)
+            let data = {parentId: parentId, firstname: firstname, lastname: lastname, generation: parentGeneration}
+            addNewMember(data, dispatch)
+        }
     }
     return (
         <Wrapper className="p-21">
@@ -116,10 +142,13 @@ const AddView = props =>{
                 <FormGroup className="mb-21">
                     <Label className="mb-8">Parent</Label>
                     <DropdownContainer>
-                        <Input type="text" className="p-8 form" name="parent" onChange={parentOnChangehandler} onClick={parentClickHandler} />
+                        <Input type="text" className="p-8 form" name="parent" onChange={parentOnChangehandler} onClick={parentClickHandler} data-id="" data-gen=""/>
                         <Dropdown ref={dropdownList} id="dropdown" className="shadow-2 zIndex-3">
-                            {names.sort().map((value, idx)=>{
-                                return <ListItems className="pl-13 pt-8 pb-8 list" key={idx+value} onClick={listClickHandler} name={value}>{value}</ListItems>
+                            {colorCodedList.map((value, idx)=>{
+                                return <ListItems className="pl-13 pt-8 pb-8 list" key={idx+value} onClick={listClickHandler} name={value.firstname} data-id={value.id} data-gen={value.generation}>
+                                        <ColorBox className="mr-8" color={value.bgColor}/>
+                                        <p>{value.firstname}</p>
+                                    </ListItems>
                             })}
                         </Dropdown>
                     </DropdownContainer>
