@@ -10,7 +10,7 @@ const Wrapper  = styled.div`
     ${flexBoxStyling.all("column", "center", "center")}
 `
 const InnerWrapper = styled.div`
-    width: auto;
+    width: 80%;
     max-width: 300px;
     background-color: #000000;
     box-sizing: border-box;
@@ -18,6 +18,9 @@ const InnerWrapper = styled.div`
     border-radius: 10px;
     p{
         color: #ffffff;
+    }
+    @media screen and (min-width: 992px){
+        width: auto;
     }
 `
 const MessageModal = props =>{
