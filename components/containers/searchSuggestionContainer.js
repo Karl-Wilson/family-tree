@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import {ColorKeys} from '../core/core'
 import { useEffect, useState } from "react";
+import { searchHandler, searchList } from "./defualtSearchContainer";
+import { useDispatch } from "react-redux";
+import { uiActions } from "../../store/reducers/uiReducer";
 
 const Wrapper  = styled.div`
     width: ${props=>props.width||"100%"};
@@ -25,12 +28,39 @@ const SuggestionList  = styled(ColorKeys)`
 `
 
 const SearchSuggestionContainer = ({className, ...props}) =>{
+    const dispatch = useDispatch()
+    const {addSearchSuggest, addMenuBtnDisplay} = uiActions
+    const blurHandler = () =>{
+        dispatch(addSearchSuggest(false));
+        dispatch(addMenuBtnDisplay(true))
+    }
+    const searchHandler = () =>{
+        try{
+            let id = document.querySelector("input[name='defaultSearch']").getAttribute("data-id")
+            if(id){
+                if(document.getElementById(id)){
+                    //let bounds = document.getElementById(id).getBoundingClientRect()
+                    document.getElementById(id).scrollIntoView()
+                    blurHandler()
+                }
+            }else{
+                throw new Error("click the suggestion")
+            }
+        }catch(e){
+            console.error(e.message)
+        }   
+    }
+    const suggestClickHandler = (e) =>{
+        document.querySelector("input[name='defaultSearch']").value = e.target.innerText
+        document.querySelector("input[name='defaultSearch']").setAttribute("data-id", e.target.getAttribute("data-id"))
+        searchHandler()
+    }
     return (
         <Wrapper className={className} {...props}>
             {props.dataInput.length<=0 && <p className="p-8">No Suggestion</p>}
             {props.dataInput.length>0 && <>
                 {props.dataInput.map(value=>{
-                    return <SuggestionList className={props.suggestionListClassName} noBorderRadius color={value.color}>{value.name}</SuggestionList>
+                    return <SuggestionList onClick={suggestClickHandler} className={props.suggestionListClassName} noBorderRadius color={value.bgColor} data-id={value.id}>{value.firstname}</SuggestionList>
                 })} 
             </>}   
         </Wrapper>

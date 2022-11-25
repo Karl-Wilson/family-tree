@@ -6,16 +6,17 @@ const handler = async (req, res) =>{
         //colorKeyn
         try{
             let familyTree, colorCode;
-
             try{
                 familyTree = await fetchFamilyTree()
                 colorCode = await fetchColorKey()
             }catch(e){
+                if(e.message){
+                    throw e.message
+                }
                 throw "Unable to fetch tree and colorKey"
             }
-
             if(familyTree != null){
-                if(colorCode != null){
+                if(colorCode != null){     
                     res.status(200).json({data: {tree: familyTree, colorCode: colorCode}})
                 }else{
                     throw "ColorKeys not available"
@@ -25,7 +26,7 @@ const handler = async (req, res) =>{
             }
 
         }catch(e){
-            res.status(401).json({error: e})
+            res.status(400).json({error: e})
         }
     }
 }

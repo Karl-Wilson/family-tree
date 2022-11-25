@@ -6,6 +6,7 @@ import { useDragFunction } from "../../utils/hooks";
 import {isPageBottom} from '../../utils/helper'
 import { uiActions } from "../../store/reducers/uiReducer";
 import { dataActions } from "../../store/reducers/dataReducer";
+import {fetchTreeAndColorForIndex} from '../../utils/thunks'
 import newData from '../core/data'
 
 const Wrapper  = styled.div`
@@ -79,13 +80,16 @@ const TreeArea = props =>{
         let searchTop = document.getElementById("defaultSearch").offsetTop
         setSlideWindowTop(searchHeight + searchTop +'px')
     }
-
     useEffect(() => {
-        if(Object.values(treeData).length < 1){
-            dispatch(addTreeData(newData))
-            dispatch(addAncestorColorData(color))
-        }  
-    }, [])
+        // if(Object.values(treeData).length < 1){
+        //     dispatch(addTreeData(newData))
+        //     dispatch(addAncestorColorData(color))
+        // }  
+        if(!treeData){
+            fetchTreeAndColorForIndex(dispatch)
+        }
+        
+    }, [treeData])
     
     useAddDragEffect(mouseDown, removeMouseDown, addMouseDown)
     useAddLoadBtnOnScroll(dispatch, addShowLoadMore);

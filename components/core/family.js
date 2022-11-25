@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 const Family = props =>{
     const dispatch = useDispatch();
     const {addSlideWindowCenterTrigger, addcurrentGen} = uiActions
-    const colorCode = useSelector(state=>state.ui.colorCode);
+    const colorCode = useSelector(state=>state.data.ancestorColorData);
     const currentGen = useSelector(state=>state.ui.currentGen);
     const [offspring, setOffspring] = useState(null)
     const [parent, setParent] = useState(false)
@@ -27,11 +27,13 @@ const Family = props =>{
     const [name, setName] = useState()
     const [bgColor, setBgColor] = useState();
     const [textColor, setTextColor] = useState();
+    const [memberId, setMemberId] = useState()
 
     useEffect(() => {
+        
         if(Object.values(props.data).length > 0){            
-            if(props.data.name){
-                setName(props.data.name)
+            if(props.data.firstname){
+                setName(props.data.firstname)
             }else{
                 setName(props.data.lastname)
             }
@@ -42,6 +44,9 @@ const Family = props =>{
             if(props.data.parentId){
                 setChild(true)
             }  
+            if(props.data.id){
+                setMemberId(props.data.id)
+            }
             if(props.data.generation > currentGen){
                 //stops at a specified generation
                 setParent(false);
@@ -53,12 +58,11 @@ const Family = props =>{
             setTextColor(props.textColor)
         } 
         colorCode.map(colorCode=>{
-         if(colorCode.name == props.data.name){
+         if(colorCode.id == props.data.id){
              setBgColor(colorCode.bgColor)
              setTextColor(colorCode.textColor)
          }
         }) 
-        
          
     }, [])
     const clickHandler = () =>{
@@ -73,7 +77,7 @@ const Family = props =>{
     return(
         <Wrapper id="family" {...props}>
             {Object.values(props.data).length > 0 && <>
-                <Person parent={parent} child={child} onClick={clickHandler} textColor={textColor} color={bgColor}>{name}</Person>
+                <Person parent={parent} child={child} onClick={clickHandler} textColor={textColor} color={bgColor} id={memberId}>{name}</Person>
                 {offspring != null && <Offspring data={offspring} bgColor={bgColor} textColor={textColor}/>}
             </>}
             {Object.values(props.data).length <= 0 && <p>No data is available</p>}

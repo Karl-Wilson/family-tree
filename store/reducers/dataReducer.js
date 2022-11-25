@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const dataSlice = createSlice({
     name: 'data',
-    initialState: {treeData: false, ancestorColorData: false},
+    initialState: {treeData: false, ancestorColorData: false, treeDataList: false, autoSuggestList: false},
         reducers: {
             addResizeData:  (state, action) => {
                 state.resizeData = action.payload;
@@ -12,6 +12,12 @@ const dataSlice = createSlice({
             },
             addAncestorColorData:  (state, action) => {
                 state.ancestorColorData = action.payload;
+            },
+            addTreeDataList:  (state, action) => {
+                state.treeDataList = action.payload;
+            },
+            addAutoSuggestList:  (state, action) => {
+                state.autoSuggestList = action.payload;
             },
         },
 })

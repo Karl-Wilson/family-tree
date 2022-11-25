@@ -24,7 +24,7 @@ const AncestorColorContainer = ({className, ...props}) =>{
             <Title className="mb-13">Ancestors</Title>
             <ColorKeyWrapper>
                 {props.dataInput.map(value=>{
-                    return <ColorKeys color={value.color} className="mr-13">{value.name}</ColorKeys>
+                    return <ColorKeys color={value.bgColor} className="mr-13">{value.name}</ColorKeys>
                 })}
             </ColorKeyWrapper>
         </Wrapper>

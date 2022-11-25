@@ -86,8 +86,8 @@ function recursion (arr){
 
             while(queue.length){
                 pointer = queue.shift();
-                console.log(f)
-                f++
+                // console.log(f)
+                // f++
                 //version 2
                 if(pointer.children == null){
                     for(let k=0;k<lastCheckpoint;k++){
