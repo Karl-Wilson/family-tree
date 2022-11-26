@@ -11,14 +11,15 @@ const handler = async (req, res) =>{
             //before storing, generate document id first
             //store in tree & members list at the same time, store using transactional method
             //when adding as list change the children status of the parent from null to []
-            const {parentId, firstname, lastname, generation} = req.body
-            let data = {parentId: parentId, firstname: firstname, lastname: lastname, generation: parseInt(generation)+1, children: null}
+            const {parentId, firstname, lastname, generation, parentName} = req.body
+            let data = {parentId: parentId, firstname: firstname, lastname: lastname, generation: parseInt(generation)+1, children: null, parentName: parentName}
             let admin = session.user.name
                 admin = admin.split(" ")
                 admin = {id: admin[0], name: admin[1]}
             let log = {admin: admin, action: "add"}
             let familyTree, initTree, newTree, memberId;
             try{
+                //fetch tree for adding member
                 try{
                     familyTree = await fetchFamilyTree()
                 }catch(e){
@@ -32,19 +33,19 @@ const handler = async (req, res) =>{
                 }
                  
                 try{
-                    initTree  = new treeGenerator(familyTree.tree)
-                    if(memberId != null){
-                    //check if member is already in tree
-                    let memberExists = initTree.findMemberById(memberId)
-                    //if it doesnt exist add to tree
-                    if(memberExists == null){
-                        newTree = initTree.add({...data, id: memberId})
+                    if(memberId){
+                        initTree  = new treeGenerator(familyTree.tree)
+                        //check if member is already in tree
+                        let memberExists = initTree.findMemberById(memberId)
+                            //if it doesnt exist add to tree
+                            if(!memberExists){
+                                newTree = initTree.add({...data, id: memberId})
+                            }else{
+                                //if it exists
+                                throw new Error("Member exists already")
+                            }   
                     }else{
-                        //if it exists
-                        throw new Error("member exists already")
-                    }   
-                    }else{
-                        throw new Error("memberId is null")
+                        throw new Error("Unable to add member")
                     }
                 }catch(e){
                     throw e.message
@@ -52,7 +53,7 @@ const handler = async (req, res) =>{
 
                 try{
                     //add tree to database and log it
-                    if(newTree != null){
+                    if(newTree){
                         data = {...data, id: memberId}
                         addTreeAndLog(data, log, newTree)
                     }

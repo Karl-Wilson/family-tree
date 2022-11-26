@@ -31,7 +31,6 @@ const useFetchData = (dispatch) =>{
     }, []) 
 }
 
-let names = ["Oti", "Obo", "Ememochu", "Aghazu", "Igbokwe", "Chibunma", "Okose"]
 const AddView = props =>{
     const dispatch = useDispatch()
     const router = useRouter()
@@ -54,23 +53,32 @@ const AddView = props =>{
     }, [treeData, ancestorColorData])
     
     const parentOnChangehandler = (e) =>{
-        let value = e.target.value
-        let nameCollection = document.getElementsByClassName('list')
-        //reset list highlight
-        for(let i=0; i<nameCollection.length; i++){
-            nameCollection[i].classList.remove("active")
-        }
-        for(let i=0; i<nameCollection.length; i++){
-            let innerText = nameCollection[i].getAttribute("name")
-            innerText = firstLetterToLowercase(innerText)
-            value = firstLetterToLowercase(value) 
-            if(innerText.startsWith(value)){
-                //scrollto the matched list item and highlight it
-                nameCollection[i].scrollIntoView()
-                nameCollection[i].classList.add("active")  
-                break;
+        try{
+            //reset input parent data
+            dropdownList.current.classList.add("show")
+            document.querySelector("input[name='parent']").setAttribute("data-id", "")
+            document.querySelector("input[name='parent']").setAttribute("data-gen", "")
+            let value = e.target.value
+            let nameCollection = document.getElementsByClassName('list')
+            //reset list highlight
+            for(let i=0; i<nameCollection.length; i++){
+                nameCollection[i].classList.remove("active")
             }
-        }        
+            for(let i=0; i<nameCollection.length; i++){
+                let innerText = nameCollection[i].getAttribute("name")
+                innerText = firstLetterToLowercase(innerText)
+                value = firstLetterToLowercase(value) 
+                if(innerText.startsWith(value)){
+                    //scrollto the matched list item and highlight it
+                    nameCollection[i].scrollIntoView()
+                    nameCollection[i].classList.add("active")  
+                    break;
+                }
+            }     
+        }catch(e){
+            console.log(e.message)
+        }
+           
     }
     const blurHandler = () =>{
         dropdownList.current.classList.remove("show")
@@ -94,10 +102,14 @@ const AddView = props =>{
         }
     }
     const validator = () =>{
+      try{  
         let formCollection = document.getElementsByClassName("form")
         let firstname = formCollection.firstname.value
         let lastname = formCollection.lastname.value
         let parent = formCollection.parent.value
+        let parentId = formCollection.parent.getAttribute("data-id")
+        let parentGen = formCollection.parent.getAttribute("data-gen")
+
         let error = null
         if(!firstname && !lastname){
             error = "Fill in empty field(s)"
@@ -105,7 +117,11 @@ const AddView = props =>{
             formCollection.lastname.style = "border-color: red"
         }
         if(!parent){
-            error = "Fill in empty field(s)"
+            error = "Fill in empty field(s) or select a parent"
+            formCollection.parent.style = "border-color: red"
+        } 
+        if(!parentId && !parentGen){
+            error = "Select a parent from list"
             formCollection.parent.style = "border-color: red"
         } 
         if(firstname){
@@ -121,19 +137,28 @@ const AddView = props =>{
             }
         }
         return error
+    }catch(e){
+        console.log(e.message)
     }
+}
     const submitHandler = () =>{
-        let error = validator()
-        if(error){
-            setError(error)
-        }else{
-            let parentId = document.querySelector("input[name='parent']").getAttribute("data-id")
-            let parentGeneration = document.querySelector("input[name='parent']").getAttribute("data-gen")
-            let firstname = capitalizeFirstLetter(document.querySelector("input[name='firstname']").value)
-            let lastname = capitalizeFirstLetter(document.querySelector("input[name='lastname']").value)
-            let data = {parentId: parentId, firstname: firstname, lastname: lastname, generation: parentGeneration}
-            addNewMember(data, dispatch)
+        try{
+            let error = validator()
+            if(error){
+                setError(error)
+            }else{
+                let parentName = document.querySelector("input[name='parent']").value
+                let parentId = document.querySelector("input[name='parent']").getAttribute("data-id")
+                let parentGeneration = document.querySelector("input[name='parent']").getAttribute("data-gen")
+                let firstname = capitalizeFirstLetter(document.querySelector("input[name='firstname']").value)
+                let lastname = capitalizeFirstLetter(document.querySelector("input[name='lastname']").value)
+                let data = {parentId: parentId, firstname: firstname, lastname: lastname, generation: parentGeneration, parentName: parentName}
+                addNewMember(data, dispatch)
+            }
+        }catch(e){
+            console.error(e.message)
         }
+        
     }
     return (
         <Wrapper className="p-21">
@@ -151,7 +176,9 @@ const AddView = props =>{
                             {!isLoading && <>{colorCodedList.map((value, idx)=>{
                                 return <ListItems className="pl-13 pt-8 pb-8 list" key={idx+value} onClick={listClickHandler} name={value.firstname} data-id={value.id} data-gen={value.generation}>
                                         <ColorBox className="mr-8" color={value.bgColor}/>
-                                        <p>{value.firstname}</p>
+                                        <>{value.firstname}</>
+                                        <span className="ml-8">({value.parentName})</span>
+
                                     </ListItems>
                             })}</>}
                             {isLoading &&<p className="p-13">Loading...</p>}

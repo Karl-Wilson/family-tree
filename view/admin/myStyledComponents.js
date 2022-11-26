@@ -117,6 +117,9 @@ export const ListItems  = styled.div`
     &:hover{
         background-color: #eeeeee;
     }
+    span{
+        color: #acacac;
+    }
 `
 export const ColorBox  = styled.div`
     width: 20px;
