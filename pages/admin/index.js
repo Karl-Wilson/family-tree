@@ -11,7 +11,6 @@ export const Wrapper  = styled.div`
 `
 
 const Admin = props =>{
-  console.log(props.session)
     return (
         <Wrapper>
             <Dashboard/>
