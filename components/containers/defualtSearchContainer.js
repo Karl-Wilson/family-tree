@@ -28,6 +28,32 @@ const Menu  = styled.img`
 export const SearchIcon  = styled.img`
     cursor: pointer;
 `
+export const searchList = (word, memberList) =>{
+    try{
+        if(!word){
+            return []
+        }else{
+            let searchTerm = capitalizeFirstLetter(word);
+            let result = []
+            memberList.map(item=>{
+                if(item.firstname){
+                    if(item.firstname.startsWith(searchTerm)){
+                        result.push(item)
+                    }
+                }
+                if(item.lastname){
+                    if(item.lastname.startsWith(searchTerm)){
+                        result.push(item)
+                    }
+                }
+            })
+            return result                
+        }
+    }catch(e){
+        console.error(e.message)
+    }
+}
+
 
 const DefaultSearchContainer = props =>{
     const dispatch = useDispatch();
@@ -50,68 +76,55 @@ const DefaultSearchContainer = props =>{
     }
     const searchHandler = () =>{
         try{
-            blurHandler()
-            let value = document.querySelector("input[name='defaultSearch']").value
-            if(value){
-                let result = searchList(value)
-                let searchTerm = capitalizeFirstLetter(value)
-                let isAvailable = false
-                let id = null
-                if(result.length){
-                    result.map(item=>{
-                        if(item.firstname == searchTerm || item.lastname == searchTerm){
-                            isAvailable = true
-                            id = item.id    
-                        }                   
-                    })
-                    if(isAvailable){
-                        document.getElementById(id).scrollIntoView()
-                    }else{
-                        throw new Error("not available")
-                    }
-                }else{
-                    throw new Error("not available")
+            let id = document.querySelector("input[name='defaultSearch']").getAttribute("data-id")
+            if(id){
+                if(document.getElementById(id)){
+                    //let bounds = document.getElementById(id).getBoundingClientRect()
+                    document.getElementById(id).classList.add("selected")
+                    document.getElementById(id).scrollIntoView()
+                    blurHandler()
                 }
+            }else{
+                throw new Error("click the suggestion")
             }
+            // if(value){
+            //     let result = searchList(value, memberList)
+            //     let searchTerm = capitalizeFirstLetter(value)
+            //     let isAvailable = false
+            //     let id = null
+            //     if(result.length){
+            //         result.map(item=>{
+            //             if(item.firstname == searchTerm || item.lastname == searchTerm){
+            //                 isAvailable = true
+            //                 id = item.id    
+            //             }                   
+            //         })
+            //         if(isAvailable){
+            //             document.getElementById(id).scrollIntoView()
+            //         }else{
+            //             throw new Error("not available")
+            //         }
+            //     }else{
+            //         throw new Error("not available")
+            //     }
+            // }
         }catch(e){
             console.error(e.message)
         }
     }    
-    const searchList = (word) =>{
-        try{
-            if(!word){
-                return []
-            }else{
-                let searchTerm = capitalizeFirstLetter(word);
-                let result = []
-                memberList.map(item=>{
-                    if(item.firstname){
-                        if(item.firstname.startsWith(searchTerm)){
-                            result.push(item)
-                        }
-                    }
-                    if(item.lastname){
-                        if(item.lastname.startsWith(searchTerm)){
-                            result.push(item)
-                        }
-                    }
-                })
-                return result                
-            }
-        }catch(e){
-            console.error(e.message)
-        }
-    }
+    
     const changeHandler = (e) =>{
         try{
             let windowWidth = window.outerWidth;
             if(windowWidth>=764){
                 dispatch(addSearchSuggest(true));           
             }
-            let result = searchList(e.target.value)
-            if(!result.length){
-                document.querySelector("input[name='defaultSearch']").setAttribute("data-id", "")
+            let id = document.querySelector("input[name='defaultSearch']").getAttribute("data-id")
+            if(id){
+                document.getElementById(id).classList.remove("selected") 
             }
+            document.querySelector("input[name='defaultSearch']").setAttribute("data-id", "")
+            let result = searchList(e.target.value, memberList)
             dispatch(addAutoSuggestList(result))
         }catch(e){
             console.error(e.message)
@@ -120,12 +133,6 @@ const DefaultSearchContainer = props =>{
     const blurHandler = () =>{
         dispatch(addSearchSuggest(false));
         dispatch(addMenuBtnDisplay(true))
-    }
-    const scrollToElement = (top, left) =>{
-        let windowWidth = window.innerWidth
-        let windowHeight = window.innerHeight
-        let draggableWindowTop = document.getElementById("draggable-window").scrollTop
-        let draggableWindowLeft = document.getElementById("draggable-window").scrollLeft
     }
     return (
         <Wrapper id="defaultSearch" className="shadow-lg-2 borderRadius p-8 m-lg-0 m-21">

@@ -37,6 +37,9 @@ export const showSidebar = () =>{
     if(document.getElementById('sidebar').classList.contains('showSidebar')){
         document.getElementById('sidebar').classList.remove('showSidebar')
         document.getElementById('sidebar').classList.add('hideSidebar')
+        document.querySelector("input[name='StartSearch']").value = ""
+        document.querySelector("input[name='EndSearch']").value = ""
+
     }else{
         document.getElementById('sidebar').classList.add('showSidebar')
         document.getElementById('sidebar').classList.remove('hideSidebar')

@@ -39,6 +39,10 @@ const Body = styled.div`
     &:hover{
         cursor: pointer;
     }
+    &.selected{
+        background-color: #000000;
+        color: #ffffff;
+    }
 `
 const Person = ({className, ...props}) =>{
     const parentClass = props.parent? 'bottom' : '';

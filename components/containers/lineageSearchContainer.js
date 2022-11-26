@@ -14,9 +14,9 @@ const Wrapper2 = styled(Wrapper)`
 `
 const LineageSearchContainer = props =>{
     return (
-        <Wrapper2 className="borderRadius p-8 mb-13">
+        <Wrapper2 className="borderRadius p-8 mb-13" {...props}>
             <Label className="pr-8 pl-8">{props.label}</Label>
-            <Input placeholder="Search for someone" borderless className="ml-8 mr-13" height="auto"/>
+            <Input name={props.label+"Search"} placeholder="Search for someone" borderless className="ml-8 mr-13" height="auto" onChange={props.change} data-id={props.dataId}/>
             <SearchIcon src="./images/search_icon.svg" className="icons"/>
         </Wrapper2>
     )

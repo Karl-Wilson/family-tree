@@ -50,17 +50,15 @@ const SearchSuggestionContainer = ({className, ...props}) =>{
             console.error(e.message)
         }   
     }
-    const suggestClickHandler = (e) =>{
-        document.querySelector("input[name='defaultSearch']").value = e.target.innerText
-        document.querySelector("input[name='defaultSearch']").setAttribute("data-id", e.target.getAttribute("data-id"))
-        searchHandler()
+    const suggestClickHandler = (e, handler) =>{
+        handler(e, blurHandler)
     }
     return (
         <Wrapper className={className} {...props}>
             {props.dataInput.length<=0 && <p className="p-8">No Suggestion</p>}
             {props.dataInput.length>0 && <>
-                {props.dataInput.map(value=>{
-                    return <SuggestionList onClick={suggestClickHandler} className={props.suggestionListClassName} noBorderRadius color={value.bgColor} data-id={value.id}>{value.firstname}</SuggestionList>
+                {props.dataInput.map((value, index)=>{
+                    return <SuggestionList onClick={(e)=>suggestClickHandler(e, props.click)} key={index+"searchsuggest"} className={props.suggestionListClassName} noBorderRadius color={value.bgColor} data-id={value.id}>{value.firstname}</SuggestionList>
                 })} 
             </>}   
         </Wrapper>

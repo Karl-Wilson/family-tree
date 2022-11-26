@@ -2,6 +2,9 @@ import styled from "styled-components";
 import { keyframes } from "styled-components";
 import {LineageSearchContainer, SearchSuggestionContainer, AncestorColorContainer} from "../containers/containers"
 import {SidebarExitBar} from "../core/core"
+import { searchList } from "../containers/defualtSearchContainer";
+import { useSelector } from "react-redux";
+import { useState } from "react";
 const slideRight = keyframes`
   from {
     left: -100%
@@ -88,16 +91,56 @@ const data = [{
 }
 ]
 const Sidebar = props =>{
+    const memberList = useSelector(state=>state.data.treeDataList)
+    let [suggest, setSuggest] = useState([])
+    let [startActive, setStartActive] = useState()
+    let [endActive, setEndActive] = useState()
+
+    const startChangeHandler = (e) =>{
+        try{
+            if(e.target.name == "StartSearch"){
+                setEndActive(false)
+                setStartActive(true)
+                document.querySelector("input[name='StartSearch']").setAttribute("data-id", "")
+            }else{
+                setEndActive(true)
+                setStartActive(false)
+                document.querySelector("input[name='EndSearch']").setAttribute("data-id", "")
+            }
+
+            let result = searchList(e.target.value, memberList)
+            setSuggest(result)
+        }catch(e){
+            throw e.message
+        }
+        
+    }
+
+    const startSuggestHandler = (e) =>{
+        document.querySelector("input[name='StartSearch']").value = e.target.innerText
+        document.querySelector("input[name='StartSearch']").setAttribute("data-id", e.target.getAttribute("data-id"))
+
+    }
+    const endSuggestHandler = (e) =>{
+        document.querySelector("input[name='EndSearch']").value = e.target.innerText
+        document.querySelector("input[name='EndSearch']").setAttribute("data-id", e.target.getAttribute("data-id"))
+
+    }
+
+    const searchHandler = (e) =>{
+        
+    }
 
     return (
         <Wrapper id="sidebar"  className="p-13 p-lg-21 zIndex-5 shadow-lg-2">
             <SidebarExitBar/>
             <LineageContainer className="mt-21 mb-21">
-                <LineageSearchContainer label="Start" className="mb-13"/>
-                <LineageSearchContainer label="End"/>
+                <LineageSearchContainer label="Start" className="mb-13" change={startChangeHandler} search={searchHandler}/>
+                <LineageSearchContainer label="End" change={startChangeHandler} search={searchHandler}/>
             </LineageContainer>
             <SuggestionConatiner className="pt-13 pb-13">
-                <SearchSuggestionContainer noBorderTop dataInput={[]}/>
+                {startActive && <SearchSuggestionContainer noBorderTop dataInput={suggest} click={startSuggestHandler}/>}
+                {endActive && <SearchSuggestionContainer noBorderTop dataInput={suggest} click={endSuggestHandler}/>}
             </SuggestionConatiner>
             <AncestorContainer className="pt-8">
                 <AncestorColorContainer dataInput={data}/>

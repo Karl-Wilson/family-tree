@@ -43,11 +43,19 @@ const Header = props =>{
     const suggestList = useSelector(state=>state.data.autoSuggestList)
     const [displayAncestorColorKey, setDisplayAncestorKey] = useState(false)
     useDisplayAncestorKeyOnResize(setDisplayAncestorKey)
+    const suggestHandler = (e, blurHandler) =>{
+            document.querySelector("input[name='defaultSearch']").value = e.target.innerText
+            document.querySelector("input[name='defaultSearch']").setAttribute("data-id", e.target.getAttribute("data-id"))
+            //searchHandler()
+            if(blurHandler != null){
+                blurHandler()
+            }    
+    }
     return (
             <Wrapper className="p-0 p-lg-21 zIndex-4" suggestOn={isSearchSuggestOn}>
                 <DefaultSearchContainer/>
                 {(ancestorColorData.length>0 && !isSearchSuggestOn && displayAncestorColorKey) && <AncestorColorContainer dataInput={ancestorColorData} className="shadow-2 mt-lg-8 mr-21 ml-21 mr-lg-0 ml-lg-0 p-8 p-lg-13"/>}
-                {isSearchSuggestOn && <SearchSuggestionContainer className="shadow-lg-2 p-13" suggestionListClassName="pr-13 pl-13" dataInput={suggestList}/>}    
+                {isSearchSuggestOn && <SearchSuggestionContainer className="shadow-lg-2 p-13" suggestionListClassName="pr-13 pl-13" dataInput={suggestList} click={suggestHandler}/>}    
             </Wrapper>
     )
 }
