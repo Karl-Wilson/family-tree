@@ -14,7 +14,7 @@ const Wrapper  = styled.div`
     cursor: pointer;
 `
 
-const Button = React.forwardRef((props, ref) =>{
-    return <Wrapper ref={ref} {...props}/>
-})
+const Button = props =>{
+    return <Wrapper {...props}/>
+}
 export default Button;
