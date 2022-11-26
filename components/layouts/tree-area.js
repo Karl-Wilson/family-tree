@@ -88,6 +88,9 @@ const TreeArea = props =>{
         if(!treeData){
             fetchTreeAndColorForIndex(dispatch)
         }
+        if(window.innerWidth<746){
+            document.getElementById("slideWindow").style.transform = `scale(${0.6})`
+        }
         
     }, [treeData])
     
