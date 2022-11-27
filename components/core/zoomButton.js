@@ -34,8 +34,8 @@ const Out  = styled(InOut)`
 const ZoomBtn = props =>{
     const dispatch = useDispatch();
     const zoomPercentageLabel = useSelector(state=>state.ui.zoomPercentage);
-    const {addZoomPercentage, addShowZoomLabel} = uiActions;
-    const [zoomLevel, setZoomLevel] = useState(1)
+    const zoomLevel = useSelector(state=>state.ui.zoomLevel);
+    const {addZoomPercentage, addShowZoomLabel, addZoomLevel} = uiActions;
     const [left, setLeft] = useState(0);
 
     const showLabelHandler = () =>{
@@ -54,36 +54,53 @@ const ZoomBtn = props =>{
             }  
         }
     }
-    const zoomInHandler = () =>{
-        let zoom = zoomLevel + 0.3
-        let newLeft = left
-        if(zoom > 1){
-            newLeft = left + 300
+    const zoomLevelMinMax = ()=>{
+        if(window.innerWidth < 764){
+            return {max: 1.3, min: 0}
         }
-        if(zoom < 1.9){
-            document.getElementById("slideWindow").style.transform = `scale(${zoom})`
-            document.getElementById("slideWindow").style.left = `${newLeft}px`
-            setZoomLevel(zoom)
-            setLeft(newLeft)
-            zoomPercentageHandler("in")
-        } 
-        showLabelHandler() 
+        return {max: 1.9, min: 0.3}
+    }
+    const zoomInHandler = () =>{
+       try{
+            let zoom = zoomLevel + 0.3
+            let newLeft = left
+            if(zoom > 1){
+                newLeft = left + 300
+            }
+            if(zoom < zoomLevelMinMax().max){
+                document.getElementById("tree").style.transform = `scale(${zoom})`
+                document.getElementById("tree").style.left = `${newLeft}px`
+                let treewidth = document.getElementById('tree').getBoundingClientRect().width
+                document.getElementById('slideWindow').style.width = treewidth+"px"
+                dispatch(addZoomLevel(zoom))
+                setLeft(newLeft)
+                zoomPercentageHandler("in")
+            } 
+            showLabelHandler()
+        }catch(e){
+            console.error(e.message)
+        }
     }
     const zoomOutHandler = () =>{
-        let zoom = zoomLevel - 0.3
-        let newLeft = left
-        if(newLeft>0){
-            newLeft = left - 300
-        }
-
-        if(zoom > 0.3){
-            document.getElementById("slideWindow").style.transform = `scale(${zoom})`
-            document.getElementById("slideWindow").style.left = `${newLeft}px`
-            setZoomLevel(zoom)
-            setLeft(newLeft)  
-            zoomPercentageHandler("out")          
-        }  
-        showLabelHandler() 
+        try{
+            let zoom = zoomLevel - 0.3
+            let newLeft = left
+            if(newLeft>0){
+                newLeft = left - 300
+            }
+            if(zoom > zoomLevelMinMax().min){
+                document.getElementById("tree").style.transform = `scale(${zoom})`
+                document.getElementById("tree").style.left = `${newLeft}px`
+                let treewidth = document.getElementById('tree').getBoundingClientRect().width
+                document.getElementById('slideWindow').style.width = treewidth+"px"
+                dispatch(addZoomLevel(zoom))
+                setLeft(newLeft)  
+                zoomPercentageHandler("out")          
+            }  
+            showLabelHandler() 
+        }catch(e){
+            console.error(e.message)
+        } 
     }
     return (
         <Wrapper {...props}>

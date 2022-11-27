@@ -8,7 +8,7 @@ const colorCode = [
 const uiSlice = createSlice({
     name: 'ui',
     initialState: {searchSuggest: false, colorCode: colorCode, zoomPercentage: 0, isPageLoading: false, slideWindowCenterTrigger: true,
-        currentGen: 9, displayMessage: false, isLoading: false, menuBtnDisplay: true},
+        currentGen: 9, displayMessage: false, isLoading: false, menuBtnDisplay: true, zoomLevel: 1},
         reducers: {
             addcurrentGen:  (state, action) => {
                 state.currentGen = action.payload;
@@ -39,6 +39,9 @@ const uiSlice = createSlice({
             },
             addMenuBtnDisplay:  (state, action) => {
                 state.menuBtnDisplay = action.payload;
+            },
+            addZoomLevel:  (state, action) => {
+                state.zoomLevel = action.payload;
             },
         },
 })

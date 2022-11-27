@@ -9,5 +9,9 @@ export const store = configureStore({
     data: dataReducer,
     user: userReducer
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 })
 export default store;

@@ -69,7 +69,7 @@ const useAddDragEffect = (mouseDown, removeMouseDown, addMouseDown) =>{
 const TreeArea = props =>{
     const dispatch = useDispatch()
     const treeData = useSelector(state=>state.data.treeData)
-    const {addShowLoadMore} = uiActions
+    const {addShowLoadMore, addZoomLevel} = uiActions
     const {addTreeData, addAncestorColorData} = dataActions
     const slideWindow = useRef(false)
     const [slideWindowTop, setSlideWindowTop] = useState();
@@ -90,6 +90,7 @@ const TreeArea = props =>{
         }
         if(window.innerWidth<746){
             document.getElementById("slideWindow").style.transform = `scale(${0.6})`
+            dispatch(addZoomLevel(0.6))
         }
         
     }, [treeData])
@@ -101,7 +102,7 @@ const TreeArea = props =>{
     return (
             <Wrapper id="draggable-window" className="zIndex-2 pt-21">
                 <InnerWrapper id="slideWindow" ref={slideWindow} top={slideWindowTop} >
-                    {Object.values(treeData).length>0 && <Family data={treeData}/>}
+                    {Object.values(treeData).length>0 && <Family id="tree" data={treeData}/>}
                     {Object.values(treeData).length<1 && <p>No data available</p>}
                 </InnerWrapper>
             </Wrapper>

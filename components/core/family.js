@@ -75,7 +75,7 @@ const Family = props =>{
         }
     }
     return(
-        <Wrapper id="family" {...props}>
+        <Wrapper {...props}>
             {Object.values(props.data).length > 0 && <>
                 <Person parent={parent} child={child} onClick={clickHandler} textColor={textColor} color={bgColor} id={memberId}>{name}</Person>
                 {offspring != null && <Offspring data={offspring} bgColor={bgColor} textColor={textColor}/>}
