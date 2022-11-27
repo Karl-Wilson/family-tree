@@ -25,6 +25,9 @@ const SuggestionList  = styled(ColorKeys)`
     &:hover{
         background-color: #F5F5F5;
     }
+    span{
+        color: #a5a5a5;
+    }
 `
 
 const SearchSuggestionContainer = ({className, ...props}) =>{
@@ -58,7 +61,7 @@ const SearchSuggestionContainer = ({className, ...props}) =>{
             {props.dataInput.length<=0 && <p className="p-8">No Suggestion</p>}
             {props.dataInput.length>0 && <>
                 {props.dataInput.map((value, index)=>{
-                    return <SuggestionList onClick={(e)=>suggestClickHandler(e, props.click)} key={index+"searchsuggest"} className={props.suggestionListClassName} noBorderRadius color={value.bgColor} data-id={value.id}>{value.firstname}</SuggestionList>
+                    return <SuggestionList onClick={(e)=>suggestClickHandler(e, props.click)} key={index+"searchsuggest"} className={props.suggestionListClassName} noBorderRadius color={value.bgColor} data-id={value.id}>{value.firstname}<span className="ml-8">({value.parentName})</span></SuggestionList>
                 })} 
             </>}   
         </Wrapper>
