@@ -51,6 +51,7 @@ export const Form  = styled.form`
 export const FormGroup = styled.div`
     position: relative;
     ${props=>flexBoxStyling.direction(props.flexDirection||"column")}
+    flex-wrap: wrap;
 `
 export const Input  = styled.input`
     width: ${props=>props.width||"100%"};
@@ -125,4 +126,23 @@ export const ColorBox  = styled.div`
     width: 20px;
     height: 20px;
     background-color: ${props=>props.color||"#000000"};
+`
+export const DropdownContainer  = styled.div`
+    width: 100%;
+    height: auto;
+    position: relative;
+`
+export const Dropdown = styled.div`
+    position: absolute;
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    display: none;
+    transition: height .5s;
+    overflow-y: auto;
+    background-color: #ffffff;
+    &.show{
+        display: flex;
+        flex-direction: column;
+    }
 `

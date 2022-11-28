@@ -108,12 +108,13 @@ class treeGenerator {
     }
     findMemberByName(val){
         if(this.root == null) return null;
+        if(!val) return null
         let node = this.root
             let queue = []
             queue.push(node)
             while(queue.length) {
                 node = queue.shift()
-                if(node.name.toLowerCase() == val.toLowerCase()){
+                if(node.firstname.toLowerCase() == val.toLowerCase()){
                     return node;
                 }
                 if(node.children != null){
@@ -124,6 +125,7 @@ class treeGenerator {
     }
     findMemberById(val){
         if(this.root == null) return null;
+        if(!val) return null
         let node = this.root
         let queue = []
         queue.push(node)
@@ -140,19 +142,26 @@ class treeGenerator {
     }
     removeMember(val){
         if(this.root == null) return null;
-            let found = this.findMemberByName(val)
+        if(!val) return null
+
+            let found = this.findMemberById(val)
+            console.log(found)
+            if(!found) return null
+
             let parent = this.findMemberById(found.parentId)
+            
             if(parent.children.length == 1){
                 parent.children = null
             }else{
                 for(let i=0; i<parent.children.length;i++){
-                    if(parent.children[i].name.toLowerCase() == val.toLowerCase()){
+                    if(parent.children[i].firstname.toLowerCase() == found.firstname.toLowerCase()){
                         parent.children.splice(i,1)
+                        console.log(parent)
                     }
                 }
             }
-            return parent.children
-       return null 
+            //return parent.children
+            return "removed"
     }
 }
 

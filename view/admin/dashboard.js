@@ -1,8 +1,24 @@
 import { useRouter } from "next/router";
 import { InnerWrapper as Wrapper , Header, Title, Body, Footer, SubmitBtn, Logout, FormGroup, Radio, Label, Form} from "./myStyledComponents";
 import { signOut } from "next-auth/react";
+import { useEffect } from "react";
+import { fetchTreeFromAddView } from "../../utils/thunks";
+import { useDispatch, useSelector } from "react-redux";
+
+export const useFetchData = (dispatch, treeData, ancestorColorData) =>{
+    useEffect(() => {
+            if(!treeData && !ancestorColorData){
+                fetchTreeFromAddView(dispatch)
+            } 
+        }, [])  
+}
 const Dashboard = props =>{
     const router = useRouter();
+    const dispatch = useDispatch()
+    const treeData = useSelector(state=>state.data.treeData)
+    const ancestorColorData = useSelector(state=>state.data.ancestorColorData)
+    useFetchData(dispatch, treeData, ancestorColorData)
+
     const actionSelectHandler = (e) =>{
         let selectedAction  = document.querySelector("input[name='actions']:checked")
         let currentUrl = router.pathname

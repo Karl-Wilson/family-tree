@@ -5,31 +5,9 @@ import { firstLetterToLowercase, colorCodeFamilyList, capitalizeFirstLetter } fr
 import { fetchTreeFromAddView, addNewMember } from "../../utils/thunks";
 import { useSelector, useDispatch } from "react-redux";
 import {PageLoading} from '../../components/core/core'
-import { InnerWrapper as Wrapper , Header, Title, Body, Footer, SubmitBtn, BackBtn, FormGroup, Radio, Label, Form, Input, ErrorMessage, ListItems, ColorBox} from "./myStyledComponents";
-const DropdownContainer  = styled.div`
-    width: 100%;
-    height: auto;
-    position: relative;
-`
-const Dropdown = styled.div`
-    position: absolute;
-    width: 100%;
-    height: auto;
-    max-height: 200px;
-    display: none;
-    transition: height .5s;
-    overflow-y: auto;
-    background-color: #ffffff;
-    &.show{
-        display: flex;
-        flex-direction: column;
-    }
-`
-const useFetchData = (dispatch) =>{
-    useEffect(() => {
-        fetchTreeFromAddView(dispatch)
-    }, []) 
-}
+import { useFetchData } from "./dashboard";
+import { InnerWrapper as Wrapper , Header, Title, Body, Footer, SubmitBtn, BackBtn, FormGroup, Radio, Label, Form, Input, ErrorMessage, ListItems, ColorBox, Dropdown, DropdownContainer} from "./myStyledComponents";
+
 
 const AddView = props =>{
     const dispatch = useDispatch()
@@ -41,7 +19,7 @@ const AddView = props =>{
     const [colorCodedList, setColorCodedList] = useState([])
     const dropdownList = useRef()
 
-    useFetchData(dispatch)
+    useFetchData(dispatch, treeData, ancestorColorData)
     useEffect(() => {
         try{
             if(treeData && ancestorColorData){

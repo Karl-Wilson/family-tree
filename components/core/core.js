@@ -9,5 +9,6 @@ import SidebarExitBar from "./sidebarExitBar";
 import ZoomLabel from "./zoomLabel";
 import PageLoading from "./pageLoading";
 import MessageModal from "./messageModal";
+import InputDropdown from "./inputDropdown";
 
-export {Input, PageWrapper, ColorKeys, ZoomBtn, Button, ErrorBoundary, Person, SidebarExitBar, ZoomLabel, PageLoading, MessageModal}
+export {Input, PageWrapper, ColorKeys, ZoomBtn, Button, ErrorBoundary, Person, SidebarExitBar, ZoomLabel, PageLoading, MessageModal, InputDropdown}

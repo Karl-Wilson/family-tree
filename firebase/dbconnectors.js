@@ -1,4 +1,4 @@
-    import { collection, query, where, getDocs, getDoc, doc, setDoc, serverTimestamp, addDoc, writeBatch, runTransaction } from "firebase/firestore";
+    import { collection, query, where, getDocs, getDoc, doc, setDoc, serverTimestamp, addDoc, writeBatch, runTransaction, updateDoc } from "firebase/firestore";
     import db from './config'
 import treeGenerator from "../utils/treeGenerator";
 export const loginConnector = async (username, password) =>{
@@ -86,6 +86,16 @@ export const fetchDataFromCollection = async (collectionName, fieldName, data) =
     return null
 }
 
+export const fetchMember = async(id)=>{
+    const docRef = doc(db, "members", id);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      return {id: id, ...docSnap.data()};
+    }
+    return null;
+}
+
 export const createFamilyTree = async (data) =>{
     await setDoc(doc(db, 'familyTree', 'v1.0'), { 
         tree: data,
@@ -109,4 +119,24 @@ export const addTreeAndLog = async(data, log, familyTree) =>{
     }catch(e){
         throw new Error(e.message)
     }
+}
+export const updateMemberProfile = async(data) =>{
+        let {id, ...otherData} = data
+        const memberRef = doc(db, "members", id);
+        await runTransaction(db, async (transaction) => {
+          const memberDoc = await transaction.get(memberRef);
+          if (!memberDoc.exists()) {
+            throw new Error("Document does not exist!");
+          }
+          transaction.update(memberRef, { ...otherData, updated: serverTimestamp() });
+        });
+}
+
+export const updateTree = async(data) =>{
+    const treeRef = doc(db, "familyTree", "v1.0");
+   
+    await updateDoc(treeRef, {
+        tree: data,
+        updated: serverTimestamp()
+    });
 }
