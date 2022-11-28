@@ -94,7 +94,7 @@ export const updateMemberProfile = (dispatch, data) =>{
             return response.json(); 
         }).then(data => {
             if(data.data){
-                let tree = data.data.tree.tree
+                let tree = data.data.tree
                 dispatch(addTreeData(tree))
                 dispatch(addPageLoading(false))
                 dispatch(addDisplayMessage("Successfully added"))

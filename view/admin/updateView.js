@@ -36,8 +36,6 @@ const UpdateView = props =>{
     useFetchData(dispatch, treeData, ancestorColorData)
     useEffect(() => {
         try{
-            console.log(treeData)
-            console.log(ancestorColorData)
             if(treeData && ancestorColorData){
                 setColorCodedList(colorCodeFamilyList(treeData.tree, ancestorColorData))
             }   
@@ -197,11 +195,11 @@ return (
                         <Radio type="checkbox" name="selectUpdate" value="lastname" onClick={selectedUpdateHandler}/>
                         <Label className="ml-8">Lastname</Label>
                     </FormGroup>
-                    <FormGroup flexDirection="row">
+                    <FormGroup flexDirection="row" className="ml-13">
                         <Radio type="checkbox" name="selectUpdate" value="wife" onClick={selectedUpdateHandler}/>
                         <Label className="ml-8">Wife</Label>
                     </FormGroup>
-                    <FormGroup flexDirection="row" className="ml-13">
+                    <FormGroup flexDirection="row" >
                         <Radio type="checkbox" name="selectUpdate" value="daughter" onClick={selectedUpdateHandler}/>
                         <Label className="ml-8">Daughter</Label>
                     </FormGroup>
@@ -241,7 +239,7 @@ return (
             <SubmitBtn borderless onClick={updateHandler}>Update</SubmitBtn>
         </Footer>
         <AncestorContainer className="pt-8 mt-21">
-                <AncestorColorContainer dataInput={data}/>
+                <AncestorColorContainer dataInput={ancestorColorData}/>
             </AncestorContainer>
     </Wrapper>
 )

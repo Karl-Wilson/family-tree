@@ -22,11 +22,11 @@ const AncestorColorContainer = ({className, ...props}) =>{
     return (
         <Wrapper id="ancestorColorKey" className={["borderRadius", className].join(' ')}>
             <Title className="mb-13">Ancestors</Title>
-            <ColorKeyWrapper>
+            {props.dataInput && <ColorKeyWrapper>
                 {props.dataInput.map((value, index)=>{
                     return <ColorKeys color={value.bgColor} key={index*0.4+"ancestorscolor"} className="mr-13">{value.name}</ColorKeys>
                 })}
-            </ColorKeyWrapper>
+            </ColorKeyWrapper>}
         </Wrapper>
     )
 }
